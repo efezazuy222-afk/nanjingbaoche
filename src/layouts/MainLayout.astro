@@ -1,0 +1,56 @@
+---
+import Header from "@src/components/Header.astro";
+import Footer from "@src/components/Footer.astro";
+import FloatingContact from "@src/components/FloatingContact.astro";
+import "@src/styles/global.css";
+import { site } from "@src/config";
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+}
+
+const {
+  title = "南京包车｜南京旅游包车、接送机与商务用车",
+  description = "南京本地包车服务，提供禄口机场接送、南京南站接送、家庭旅游包车、商务用车及南京周边定制线路。",
+  image = "/img/hero.jpg",
+} = Astro.props;
+const canonical = new URL(Astro.url.pathname, `https://${site.domain}`).toString();
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  name: site.name,
+  url: `https://${site.domain}`,
+  telephone: site.phone,
+  email: site.email,
+  areaServed: "南京市及江苏周边",
+  description,
+};
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content="index,follow" />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/img/favicon.png" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={image} />
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  </head>
+  <body>
+    <Header />
+    <main><slot /></main>
+    <Footer />
+    <FloatingContact />
+  </body>
+</html>

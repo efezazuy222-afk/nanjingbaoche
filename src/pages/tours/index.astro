@@ -1,0 +1,19 @@
+---
+import { getCollection } from "astro:content";
+import MainLayout from "@src/layouts/MainLayout.astro";
+import TourCard from "@src/components/TourCard.astro";
+const tours = await getCollection("tours");
+---
+<MainLayout title="南京包车线路｜市内一日游、接送机与江苏周边" description="查看南京市内、牛首山、扬州周边、机场接送及商务包车线路，支持按人数和兴趣定制。">
+  <section class="page-head"><div class="container"><span>南京及江苏周边</span><h1>包车线路</h1><p>以下行程均可作为参考。您的出发时间、人数、住宿位置和兴趣不同，路线也可以重新组合。</p></div></section>
+  <section class="section"><div class="container route-grid">{tours.map((tour) => <TourCard tour={tour} />)}</div></section>
+</MainLayout>
+<style>
+  .page-head { padding: 80px 0 60px; background: #e6e1d7; }
+  .page-head span { color: #a33a2b; font-size: .82rem; font-weight: 800; }
+  h1 { margin: 8px 0 14px; font-family: Georgia,"Songti SC",serif; font-size: clamp(2.8rem,6vw,5rem); }
+  .page-head p { max-width: 650px; color: #616862; line-height: 1.8; }
+  .route-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 22px; }
+  @media(max-width:850px){.route-grid{grid-template-columns:1fr 1fr}}
+  @media(max-width:560px){.route-grid{grid-template-columns:1fr}}
+</style>

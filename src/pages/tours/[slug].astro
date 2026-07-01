@@ -1,0 +1,26 @@
+---
+import { getCollection, render } from "astro:content";
+import { Icon } from "astro-icon/components";
+import MainLayout from "@src/layouts/MainLayout.astro";
+import InquiryForm from "@src/components/InquiryForm.astro";
+
+export async function getStaticPaths() {
+  const tours = await getCollection("tours");
+  return tours.map((tour) => ({ params: { slug: tour.id }, props: { tour } }));
+}
+const { tour } = Astro.props;
+const { Content } = await render(tour);
+---
+<MainLayout title={`${tour.data.title}｜南京包车`} description={tour.data.description} image={tour.data.cover}>
+  <section class="detail-hero"><img src={tour.data.cover} alt={tour.data.title} /><div class="detail-shade"></div><div class="container detail-title"><span>{tour.data.category}</span><h1>{tour.data.title}</h1><p>{tour.data.description}</p></div></section>
+  <div class="container detail-meta"><span><Icon name="bi:clock" /><small>参考时长</small><strong>{tour.data.duration}</strong></span><span><Icon name="bi:geo-alt" /><small>服务区域</small><strong>{tour.data.location}</strong></span><span><Icon name="bi:people" /><small>适合人数</small><strong>{tour.data.group}</strong></span></div>
+  <section class="section"><div class="container detail-grid"><article class="prose"><Content /><div class="notice"><strong>说明</strong><p>页面为行程参考，不构成固定报价或景区开放承诺。实际服务以双方确认的日期、车型、里程、时长和用车方案为准。</p></div></article><aside><div class="highlights"><h2>行程亮点</h2>{tour.data.highlights.map((item) => <p><Icon name="bi:check-circle" />{item}</p>)}</div><InquiryForm /></aside></div></section>
+</MainLayout>
+<style>
+  .detail-hero { position:relative; min-height:520px; display:flex; align-items:end; color:white; overflow:hidden; }
+  .detail-hero>img,.detail-shade{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.detail-shade{background:rgba(20,29,25,.52)}
+  .detail-title{position:relative;padding-bottom:60px}.detail-title>span{font-weight:800}.detail-title h1{max-width:850px;margin:10px 0;font-family:Georgia,"Songti SC",serif;font-size:clamp(2.4rem,5vw,4.6rem);line-height:1.15}.detail-title p{max-width:680px;line-height:1.8;color:rgba(255,255,255,.9)}
+  .detail-meta{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid #d8d3c7;border-top:0;background:#fffefa}.detail-meta>span{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:12px;padding:22px;border-right:1px solid #e2ddd2}.detail-meta>span:last-child{border:0}.detail-meta :global(svg){grid-row:1/3;color:#a33a2b;font-size:1.3rem}.detail-meta small{color:#747b75}.detail-meta strong{margin-top:2px}
+  .detail-grid{display:grid;grid-template-columns:1fr 400px;gap:65px;align-items:start}.detail-grid aside{display:grid;gap:18px}.highlights{padding:24px;border-left:4px solid #a33a2b;background:#e9e4da}.highlights h2{margin:0 0 14px;font-family:Georgia,"Songti SC",serif;font-size:1.35rem}.highlights p{display:flex;align-items:center;gap:8px}.highlights :global(svg){color:#315848}.notice{margin-top:35px;padding:20px;border:1px solid #d8d3c7;background:#fffefa}.notice p{margin-bottom:0;font-size:.9rem}
+  @media(max-width:900px){.detail-grid{grid-template-columns:1fr}.detail-meta{grid-template-columns:1fr}.detail-meta>span{border-right:0;border-bottom:1px solid #e2ddd2}}
+</style>

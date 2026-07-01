@@ -1,0 +1,16 @@
+---
+import MainLayout from "@src/layouts/MainLayout.astro";
+const faqs=[
+  ["包车价格怎么计算？","通常根据车型、服务时长、里程、出发日期和是否跨城综合确认。先提供人数与行程，我们再给出对应方案。"],
+  ["可以只接送机场或高铁站吗？","可以。提供航班或车次、人数、行李数量和上下车地址即可沟通。"],
+  ["行程中可以临时调整景点吗？","在不明显增加里程、服务时长且不影响后续安排的情况下，可以与司机沟通调整。跨城或较大变化需要重新确认。"],
+  ["包车包含门票和餐饮吗？","除非方案中另有说明，包车费用通常不包含景区门票、餐饮、住宿和景区内部交通。"],
+  ["老人孩子同行怎么办？","请提前说明年龄、人数、儿童座椅和行动便利需求，我们会协助减少换乘与不必要的步行。"],
+  ["多久前预订比较合适？","普通工作日可尽早咨询；节假日、会展期间、多人团队或特殊车型建议更早确认。"],
+];
+---
+<MainLayout title="南京包车常见问题｜价格、车型与行程调整" description="关于南京包车价格、接送机、儿童座椅、路线调整及费用包含的常见问题。">
+  <section class="page-head"><div class="container"><span>服务说明</span><h1>常见问题</h1><p>预订之前，把容易忽略的细节先说清楚。</p></div></section>
+  <section class="section"><div class="container faq-list">{faqs.map(([q,a],i)=><details open={i===0}><summary>{q}</summary><p>{a}</p></details>)}</div></section>
+</MainLayout>
+<style>.page-head{padding:80px 0 60px;background:#e6e1d7}.page-head span{color:#a33a2b;font-weight:800}.page-head h1{margin:8px 0;font-family:Georgia,"Songti SC",serif;font-size:clamp(2.8rem,6vw,5rem)}.faq-list{max-width:850px}.faq-list details{border-bottom:1px solid #d3cdc1}.faq-list summary{padding:22px 0;cursor:pointer;font-size:1.05rem;font-weight:800}.faq-list p{max-width:760px;margin:0 0 22px;color:#616963;line-height:1.8}</style>

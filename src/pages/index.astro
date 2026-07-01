@@ -1,0 +1,130 @@
+---
+import { getCollection } from "astro:content";
+import { Icon } from "astro-icon/components";
+import MainLayout from "@src/layouts/MainLayout.astro";
+import TourCard from "@src/components/TourCard.astro";
+import BlogCard from "@src/components/BlogCard.astro";
+import InquiryForm from "@src/components/InquiryForm.astro";
+import { imageUrls, site } from "@src/config";
+
+const tours = (await getCollection("tours")).filter((item) => item.data.featured).slice(0, 3);
+const blogs = (await getCollection("blog")).sort((a, b) => b.data.date.localeCompare(a.data.date)).slice(0, 3);
+const services = [
+  { icon: "bi:airplane", title: "禄口机场接送", text: "提前确认航班与落地时间，司机按约等候，行李多也可按需安排车型。" },
+  { icon: "bi:train-front", title: "高铁站点接送", text: "覆盖南京南站、南京站及主要酒店，适合家庭、团队和商务到访。" },
+  { icon: "bi:compass", title: "南京旅游包车", text: "不赶团、不拼车，按您的兴趣安排景点顺序和停留时间。" },
+  { icon: "bi:briefcase", title: "商务会议用车", text: "接待、会展、企业参访与多日用车，沟通清晰，行程稳定。" },
+];
+---
+
+<MainLayout>
+  <section class="hero" style={`background-image:url('${imageUrls.hero}')`}>
+    <div class="hero-shade"></div>
+    <div class="container hero-inner">
+      <div class="hero-copy">
+        <span class="hero-badge">南京本地司机 · 一车一团</span>
+        <h1>把南京的路程，<br />变成旅程的一部分</h1>
+        <p>机场高铁接送、家庭旅游、商务用车与江苏周边包车。路线可以灵活调整，时间由您掌握。</p>
+        <div class="hero-actions"><a class="btn btn-primary" href="/contact"><Icon name="bi:send" />免费获取用车方案</a><a class="btn btn-light" href={`tel:${site.phone}`}><Icon name="bi:telephone" />{site.phone}</a></div>
+        <div class="hero-trust"><span><Icon name="bi:check-circle" />行程确认后再出发</span><span><Icon name="bi:check-circle" />车型按人数匹配</span><span><Icon name="bi:check-circle" />南京及江苏周边可定制</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="services" class="service-band">
+    <div class="container service-grid">
+      {services.map((item) => <article><Icon name={item.icon} /><div><h2>{item.title}</h2><p>{item.text}</p></div></article>)}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container split-intro">
+      <div><span class="section-kicker">热门包车路线</span><h2 class="section-title">第一次来南京，<br />从这些路线开始</h2></div>
+      <div><p class="section-lead">经典景点可以一次看全，也可以放慢一点。我们根据出行人数、老人孩子、行李和返程时间，帮您把路线排得更顺。</p><a class="text-link" href="/tours">查看全部线路 <Icon name="bi:arrow-right" /></a></div>
+    </div>
+    <div class="container cards-grid">{tours.map((tour) => <TourCard tour={tour} />)}</div>
+  </section>
+
+  <section class="section story-band">
+    <div class="container story-grid">
+      <div class="story-image"><img src={imageUrls.cityWall} alt="南京明城墙与城市风景" loading="lazy" /><span>南京 · 本地出发</span></div>
+      <div class="story-copy"><span class="section-kicker">为什么选择包车</span><h2 class="section-title">少一点换乘，<br />多一点从容</h2><p>南京的景点分布在钟山、老城、河西和江宁等多个方向。包车的价值不只是“有辆车”，而是有人提前把接送、停车、游览顺序和返程时间理顺。</p>
+        <div class="story-points"><div><strong>01</strong><span>家人同行<br /><small>老人孩子少走路</small></span></div><div><strong>02</strong><span>灵活停留<br /><small>不被团队时间催促</small></span></div><div><strong>03</strong><span>行李安心<br /><small>适合跨城与接送</small></span></div></div>
+        <a class="btn btn-primary" href="/about">了解我们的服务方式</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section vehicle-section">
+    <div class="container vehicle-head"><div><span class="section-kicker">车型建议</span><h2 class="section-title">人数不同，舒适不打折</h2></div><p>告诉我们人数、行李和儿童座椅需求，我们会推荐合适车型。</p></div>
+    <div class="container vehicle-grid">
+      <article><Icon name="bi:car-front" /><h3>5座舒适轿车</h3><p>适合1–3位乘客，机场接送、商务拜访与市内短途更灵活。</p><span>建议：2–3件行李</span></article>
+      <article><Icon name="bi:car-front" /><h3>7座商务车</h3><p>家庭与朋友小团常用，乘坐空间更宽松，长途体验更舒适。</p><span>建议：4–6位乘客</span></article>
+      <article><Icon name="bi:people" /><h3>中巴及团队用车</h3><p>适合企业、研学、亲友团与会议接待，可按团队人数安排。</p><span>支持多日行程</span></article>
+    </div>
+  </section>
+
+  <section class="section inquiry-band">
+    <div class="container inquiry-grid"><div class="inquiry-copy"><span class="section-kicker">定制您的南京行程</span><h2 class="section-title">先说需求，<br />我们帮您把路排顺</h2><p>没有完整计划也没关系。告诉我们日期、人数和想去的地方，就能开始沟通。</p><div class="contact-list"><a href={`tel:${site.phone}`}><Icon name="bi:telephone" /><span>全国咨询热线<strong>{site.phone}</strong></span></a><a href={`tel:${site.mobileLink}`}><Icon name="bi:telephone" /><span>手机联系<strong>{site.mobile}</strong></span></a><a href={`mailto:${site.email}`}><Icon name="bi:envelope" /><span>邮箱<strong>{site.email}</strong></span></a></div></div><InquiryForm /></div>
+  </section>
+
+  <section class="section">
+    <div class="container split-intro"><div><span class="section-kicker">南京出行攻略</span><h2 class="section-title">出发前，先把细节看明白</h2></div><div><p class="section-lead">关于景点搭配、季节选择、接送站和家庭出行的实用建议，我们会持续更新。</p><a class="text-link" href="/blogs">进入攻略中心 <Icon name="bi:arrow-right" /></a></div></div>
+    <div class="container blog-grid">{blogs.map((post) => <BlogCard post={post} />)}</div>
+  </section>
+</MainLayout>
+
+<style>
+  .hero { position: relative; min-height: 680px; display: flex; align-items: center; background-size: cover; background-position: center; color: white; }
+  .hero-shade { position: absolute; inset: 0; background: rgba(18,30,26,.48); }
+  .hero-inner { position: relative; padding: 90px 0; }
+  .hero-copy { max-width: 720px; }
+  .hero-badge { display: inline-flex; padding: 7px 10px; border-left: 3px solid #d35e49; background: rgba(19,31,27,.62); font-size: .82rem; font-weight: 800; }
+  h1 { margin: 20px 0 18px; font-family: Georgia,"Songti SC",serif; font-size: clamp(3rem, 6.4vw, 5.5rem); line-height: 1.08; font-weight: 600; }
+  .hero-copy > p { max-width: 620px; margin: 0; color: rgba(255,255,255,.9); font-size: 1.08rem; line-height: 1.85; }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+  .hero-trust { display: flex; flex-wrap: wrap; gap: 18px; margin-top: 27px; color: rgba(255,255,255,.86); font-size: .8rem; }
+  .hero-trust span { display: inline-flex; align-items: center; gap: 6px; }
+  .service-band { border-bottom: 1px solid #d8d3c7; background: #fffefa; }
+  .service-grid { display: grid; grid-template-columns: repeat(4, 1fr); }
+  .service-grid article { display: flex; gap: 14px; padding: 28px 22px; border-right: 1px solid #e2ddd2; }
+  .service-grid article:last-child { border: 0; }
+  .service-grid :global(svg) { flex: 0 0 auto; margin-top: 3px; color: #a33a2b; font-size: 1.35rem; }
+  .service-grid h2 { margin: 0 0 6px; font-size: .95rem; }
+  .service-grid p { margin: 0; color: #6a716c; font-size: .8rem; line-height: 1.65; }
+  .split-intro { display: grid; grid-template-columns: 1fr 1fr; gap: 70px; align-items: end; margin-bottom: 34px; }
+  .split-intro .section-lead { margin: 0 0 14px; }
+  .text-link { display: inline-flex; align-items: center; gap: 7px; color: #a33a2b; font-weight: 800; }
+  .cards-grid, .blog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .story-band { background: #e7e2d8; }
+  .story-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 70px; align-items: center; }
+  .story-image { position: relative; }
+  .story-image img { width: 100%; aspect-ratio: 4/5; object-fit: cover; }
+  .story-image span { position: absolute; left: 18px; bottom: 18px; padding: 9px 12px; background: #fffefa; color: #7d2c22; font-size: .78rem; font-weight: 800; }
+  .story-copy > p { color: #59605b; line-height: 1.9; }
+  .story-points { margin: 25px 0; border-top: 1px solid #c7c0b3; }
+  .story-points > div { display: flex; gap: 16px; padding: 15px 0; border-bottom: 1px solid #c7c0b3; }
+  .story-points strong { color: #a33a2b; font-family: Georgia,serif; }
+  .story-points span { font-weight: 800; }
+  .story-points small { color: #6b726d; font-weight: 400; }
+  .vehicle-section { background: #1d2722; color: white; }
+  .vehicle-head { display: flex; justify-content: space-between; align-items: end; gap: 40px; }
+  .vehicle-head p { max-width: 380px; color: #bac3be; line-height: 1.7; }
+  .vehicle-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; margin-top: 34px; background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.14); }
+  .vehicle-grid article { padding: 30px; background: #1d2722; }
+  .vehicle-grid :global(svg) { color: #df765f; font-size: 1.8rem; }
+  .vehicle-grid h3 { margin: 18px 0 9px; font-size: 1.12rem; }
+  .vehicle-grid p { min-height: 70px; color: #b6c0ba; font-size: .9rem; line-height: 1.7; }
+  .vehicle-grid span { color: #e8b2a6; font-size: .78rem; font-weight: 800; }
+  .inquiry-band { background: #ece8df; }
+  .inquiry-grid { display: grid; grid-template-columns: .85fr 1.15fr; gap: 60px; align-items: start; }
+  .inquiry-copy > p { max-width: 460px; color: #606762; line-height: 1.85; }
+  .contact-list { display: grid; gap: 9px; margin-top: 28px; }
+  .contact-list a { display: flex; align-items: center; gap: 13px; padding: 13px 0; border-bottom: 1px solid #cec8bc; }
+  .contact-list :global(svg) { color: #a33a2b; font-size: 1.1rem; }
+  .contact-list span { color: #6a716c; font-size: .78rem; }
+  .contact-list strong { display: block; margin-top: 2px; color: #18201d; font-size: .98rem; }
+  @media (max-width: 900px) { .service-grid { grid-template-columns: 1fr 1fr; } .service-grid article:nth-child(2) { border-right: 0; } .story-grid, .inquiry-grid { grid-template-columns: 1fr; } .story-image img { aspect-ratio: 16/10; } }
+  @media (max-width: 720px) { .hero { min-height: 620px; } h1 { font-size: 3rem; } .hero-trust { display: grid; gap: 8px; } .split-intro { grid-template-columns: 1fr; gap: 18px; align-items: start; } .cards-grid, .blog-grid, .vehicle-grid { grid-template-columns: 1fr; } .vehicle-head { display: block; } }
+  @media (max-width: 480px) { .service-grid { grid-template-columns: 1fr; } .service-grid article { border-right: 0; border-bottom: 1px solid #e2ddd2; } .hero-actions .btn { width: 100%; } }
+</style>

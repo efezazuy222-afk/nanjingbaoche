@@ -1,0 +1,11 @@
+---
+import { getCollection } from "astro:content";
+import MainLayout from "@src/layouts/MainLayout.astro";
+import BlogCard from "@src/components/BlogCard.astro";
+const posts = (await getCollection("blog")).sort((a,b)=>b.data.date.localeCompare(a.data.date));
+---
+<MainLayout title="南京旅游攻略｜包车路线、接送与家庭出行指南" description="持续更新南京包车路线、机场接送、亲子旅行、季节玩法与江苏周边出行攻略。">
+  <section class="page-head"><div class="container"><span>实用信息持续更新</span><h1>南京出行攻略</h1><p>少一点泛泛而谈，多一点真正影响行程的细节：怎么顺路、如何少走路、什么时候应该留出余量。</p></div></section>
+  <section class="section"><div class="container blog-grid">{posts.map((post)=><BlogCard post={post}/>)}</div></section>
+</MainLayout>
+<style>.page-head{padding:80px 0 60px;background:#e6e1d7}.page-head span{color:#a33a2b;font-size:.82rem;font-weight:800}h1{margin:8px 0 14px;font-family:Georgia,"Songti SC",serif;font-size:clamp(2.8rem,6vw,5rem)}.page-head p{max-width:650px;color:#616862;line-height:1.8}.blog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}@media(max-width:800px){.blog-grid{grid-template-columns:1fr 1fr}}@media(max-width:540px){.blog-grid{grid-template-columns:1fr}}</style>

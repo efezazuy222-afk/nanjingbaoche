@@ -1,0 +1,9 @@
+---
+import MainLayout from "@src/layouts/MainLayout.astro";
+import { imageUrls } from "@src/config";
+---
+<MainLayout title="关于南京包车｜本地司机与定制出行" description="了解南京包车的服务方式：按人数推荐车型、按兴趣设计路线、行程确认后再出发。">
+  <section class="about-hero"><div class="container"><span>关于我们</span><h1>熟悉南京的路，<br/>更在意旅途的感受</h1></div></section>
+  <section class="section"><div class="container about-grid"><img src={imageUrls.qinhuai} alt="南京秦淮风景"/><div><span class="section-kicker">我们的服务方式</span><h2 class="section-title">不做流水线行程</h2><p>南京包车服务面向家庭、朋友小团和商务客户。我们会先了解日期、人数、行李、住宿位置和想去的地方，再安排车型与路线。</p><p>我们不承诺不现实的“全包最低价”，也不会用模糊描述替代关键细节。用车前会确认接送地点、服务范围和时间安排，让双方都清楚。</p><div class="principles"><strong>路线合理</strong><strong>沟通清楚</strong><strong>时间灵活</strong><strong>车型匹配</strong></div></div></div></section>
+</MainLayout>
+<style>.about-hero{padding:110px 0;background:#1d2722;color:white}.about-hero span{color:#df765f;font-weight:800}.about-hero h1{margin:12px 0 0;font-family:Georgia,"Songti SC",serif;font-size:clamp(3rem,6vw,5.5rem);line-height:1.12}.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center}.about-grid>img{width:100%;aspect-ratio:4/5;object-fit:cover}.about-grid p{color:#5e665f;line-height:1.9}.principles{display:grid;grid-template-columns:1fr 1fr;margin-top:25px;border-top:1px solid #d8d3c7}.principles strong{padding:16px 0;border-bottom:1px solid #d8d3c7}@media(max-width:760px){.about-grid{grid-template-columns:1fr}.about-grid>img{aspect-ratio:16/10}}</style>

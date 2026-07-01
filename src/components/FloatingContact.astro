@@ -1,0 +1,15 @@
+---
+import { Icon } from "astro-icon/components";
+import { site } from "@src/config";
+---
+
+<div class="floating-contact" aria-label="快捷联系">
+  <a href={`tel:${site.mobileLink}`} title="立即拨打手机"><Icon name="bi:telephone" /><span>电话咨询</span></a>
+  <a href="/contact" title="提交行程需求"><Icon name="bi:send" /><span>免费询价</span></a>
+</div>
+<style>
+  .floating-contact { position: fixed; z-index: 45; right: 18px; bottom: 22px; display: grid; gap: 8px; }
+  .floating-contact a { display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px; border-radius: 6px; background: #a33a2b; color: white; box-shadow: 0 10px 25px rgba(24,32,29,.22); font-size: .86rem; font-weight: 750; }
+  .floating-contact a:last-child { background: #315848; }
+  @media (max-width: 600px) { .floating-contact { left: 12px; right: 12px; bottom: 10px; grid-template-columns: 1fr 1fr; } .floating-contact a { justify-content: center; } }
+</style>

@@ -1,0 +1,48 @@
+name: 每日发布南京攻略或线路
+
+on:
+  schedule:
+    - cron: "30 1 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-content
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      OPENAI_MODEL: ${{ vars.OPENAI_MODEL || 'gpt-5.4-mini' }}
+    steps:
+      - name: 获取网站代码
+        uses: actions/checkout@v4
+
+      - name: 安装 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: 安装依赖
+        run: npm install --no-audit --no-fund
+
+      - name: 生成今日内容
+        run: npm run publish:daily
+
+      - name: 构建检查
+        run: npm run build
+
+      - name: 提交并触发 Cloudflare 部署
+        run: |
+          git config user.name "nanjingbaoche-content"
+          git config user.email "actions@users.noreply.github.com"
+          git add src/content
+          git diff --cached --quiet && exit 0
+          git commit -m "content: publish daily Nanjing travel update"
+          git push

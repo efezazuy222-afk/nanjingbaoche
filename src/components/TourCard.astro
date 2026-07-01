@@ -1,0 +1,26 @@
+---
+import { Icon } from "astro-icon/components";
+const { tour } = Astro.props;
+---
+<article class="tour-card">
+  <a class="tour-image" href={`/tours/${tour.id}/`}><img src={tour.data.cover} alt={tour.data.title} loading="lazy" /><span>{tour.data.category}</span></a>
+  <div class="tour-content">
+    <div class="tour-meta"><span><Icon name="bi:clock" />{tour.data.duration}</span><span><Icon name="bi:people" />{tour.data.group}</span></div>
+    <h2><a href={`/tours/${tour.id}/`}>{tour.data.title}</a></h2>
+    <p>{tour.data.description}</p>
+    <a class="tour-link" href={`/tours/${tour.id}/`}>查看行程 <Icon name="bi:arrow-right" /></a>
+  </div>
+</article>
+<style>
+  .tour-card { overflow: hidden; border: 1px solid #ddd7cb; border-radius: 8px; background: #fffefa; }
+  .tour-image { position: relative; display: block; aspect-ratio: 4/3; overflow: hidden; }
+  .tour-image img { width: 100%; height: 100%; object-fit: cover; transition: transform .45s ease; }
+  .tour-card:hover img { transform: scale(1.035); }
+  .tour-image span { position: absolute; left: 14px; top: 14px; padding: 6px 9px; border-radius: 4px; background: rgba(255,254,250,.94); color: #8c3024; font-size: .75rem; font-weight: 800; }
+  .tour-content { padding: 20px; }
+  .tour-meta { display: flex; gap: 15px; color: #6b736d; font-size: .78rem; }
+  .tour-meta span { display: inline-flex; align-items: center; gap: 5px; }
+  h2 { margin: 12px 0 8px; font-family: Georgia,"Songti SC",serif; font-size: 1.35rem; line-height: 1.35; }
+  p { margin: 0; color: #68706b; font-size: .9rem; line-height: 1.7; }
+  .tour-link { display: inline-flex; align-items: center; gap: 7px; margin-top: 16px; color: #a33a2b; font-size: .86rem; font-weight: 800; }
+</style>
