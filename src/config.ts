@@ -1,5 +1,5 @@
 export const site = {
-  name: "南京包车",
+  name: "澜青旅行社",
   domain: "nanjingbaoche.com",
   phone: "400-858-0518",
   mobile: "152 5096 9678",
