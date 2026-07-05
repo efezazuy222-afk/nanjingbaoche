@@ -34,8 +34,8 @@ npm run build
 
 在 GitHub 仓库的 `Settings > Secrets and variables > Actions` 中新增：
 
-- Secret：`OPENAI_API_KEY`
-- Variable（可选）：`OPENAI_MODEL`，默认使用 `gpt-5.4-mini`
+- Secret：`DEEPSEEK_API_KEY`
+- Variable（可选）：`DEEPSEEK_MODEL`，默认使用 `deepseek-v4-flash`
 
 密钥不要写入 `.env.example`、源码或提交记录。工作流会先生成内容，再执行构建检查；只有构建成功才会提交并触发 Cloudflare 部署。
 

@@ -3,9 +3,9 @@ import { fileURLToPath } from "node:url";
 import path from "node:path";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const apiKey = process.env.OPENAI_API_KEY;
-const model = process.env.OPENAI_MODEL || "gpt-5.4-mini";
-if (!apiKey) throw new Error("缺少 OPENAI_API_KEY，请在 GitHub Secrets 中配置。");
+const apiKey = process.env.DEEPSEEK_API_KEY;
+const model = process.env.DEEPSEEK_MODEL || "deepseek-v4-flash";
+if (!apiKey) throw new Error("缺少 DEEPSEEK_API_KEY，请在 GitHub Secrets 中配置。");
 
 const today = new Date().toISOString().slice(0, 10);
 const blogDir = path.join(root, "src", "content", "blog");
@@ -63,14 +63,19 @@ const prompt = type === "blog"
   ? `${sharedRules}\n主题：${topic}\nfrontmatter必须严格包含：title、cover、date、category、tags（中文字符串数组）、readTime（整数）、description。frontmatter后写有2至4个二级标题的实用正文。`
   : `${sharedRules}\n主题：${topic}\nfrontmatter必须严格包含：title、category、description、cover、duration、location、group、highlights（3项中文字符串数组）、featured: false。frontmatter后写建议行程、适合人群和温馨提示，不把参考路线写成固定承诺。`;
 
-const response = await fetch("https://api.openai.com/v1/responses", {
+const response = await fetch("https://api.deepseek.com/chat/completions", {
   method: "POST",
   headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
-  body: JSON.stringify({ model, input: prompt, reasoning: { effort: "low" }, max_output_tokens: 3200 }),
+  body: JSON.stringify({
+    model,
+    messages: [{ role: "user", content: prompt }],
+    max_tokens: 3200,
+    temperature: 0.7,
+  }),
 });
-if (!response.ok) throw new Error(`OpenAI API 请求失败：${response.status} ${await response.text()}`);
+if (!response.ok) throw new Error(`DeepSeek API 请求失败：${response.status} ${await response.text()}`);
 const payload = await response.json();
-let text = payload.output_text || payload.output?.flatMap((item) => item.content || []).find((item) => item.type === "output_text")?.text;
+let text = payload.choices?.[0]?.message?.content;
 if (!text) throw new Error("API 没有返回正文。");
 text = text.trim().replace(/^```(?:mdx|markdown)?\s*/i, "").replace(/\s*```$/, "").trim();
 if (!text.startsWith("---") || !text.includes("\n---")) throw new Error("生成内容缺少有效 frontmatter。");
