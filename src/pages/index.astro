@@ -6,6 +6,7 @@ import TourCard from "@src/components/TourCard.astro";
 import BlogCard from "@src/components/BlogCard.astro";
 import InquiryForm from "@src/components/InquiryForm.astro";
 import { imageUrls, site } from "@src/config";
+import { faqs } from "@src/data/faqs";
 
 const tours = (await getCollection("tours")).filter((item) => item.data.featured).slice(0, 3);
 const blogs = (await getCollection("blog")).sort((a, b) => b.data.date.localeCompare(a.data.date)).slice(0, 3);
@@ -68,6 +69,13 @@ const services = [
     <div class="container inquiry-grid"><div class="inquiry-copy"><span class="section-kicker">定制您的南京行程</span><h2 class="section-title">先说需求，<br />我们帮您把路排顺</h2><p>没有完整计划也没关系。告诉我们日期、人数和想去的地方，就能开始沟通。</p><div class="contact-list"><a href={`tel:${site.phone}`}><Icon name="bi:telephone" /><span>全国咨询热线<strong>{site.phone}</strong></span></a><a href={`tel:${site.mobileLink}`}><Icon name="bi:telephone" /><span>手机联系<strong>{site.mobile}</strong></span></a><a href={`mailto:${site.email}`}><Icon name="bi:envelope" /><span>邮箱<strong>{site.email}</strong></span></a></div></div><InquiryForm /></div>
   </section>
 
+  <section class="section faq-section">
+    <div class="container faq-grid">
+      <div class="faq-intro"><span class="section-kicker">南京包车常见问题</span><h2 class="section-title">预订之前，<br />先把细节问清楚</h2><p>价格、接送地点、路线调整和老人孩子同行，是咨询时最常见的几个问题。</p><a class="text-link" href="/faqs">查看全部问题 <Icon name="bi:arrow-right" /></a></div>
+      <div class="faq-list">{faqs.slice(0,5).map(([question,answer],index)=><details open={index===0}><summary>{question}</summary><p>{answer}</p></details>)}</div>
+    </div>
+  </section>
+
   <section class="section">
     <div class="container split-intro"><div><span class="section-kicker">南京出行攻略</span><h2 class="section-title">出发前，先把细节看明白</h2></div><div><p class="section-lead">关于景点搭配、季节选择、接送站和家庭出行的实用建议，我们会持续更新。</p><a class="text-link" href="/blogs">进入攻略中心 <Icon name="bi:arrow-right" /></a></div></div>
     <div class="container blog-grid">{blogs.map((post) => <BlogCard post={post} />)}</div>
@@ -124,7 +132,14 @@ const services = [
   .contact-list :global(svg) { color: #a33a2b; font-size: 1.1rem; }
   .contact-list span { color: #6a716c; font-size: .78rem; }
   .contact-list strong { display: block; margin-top: 2px; color: #18201d; font-size: .98rem; }
+  .faq-section { background: #fffefa; }
+  .faq-grid { display: grid; grid-template-columns: .8fr 1.2fr; gap: 70px; align-items: start; }
+  .faq-intro { position: sticky; top: 110px; }
+  .faq-intro > p { max-width: 430px; color: #626963; line-height: 1.8; }
+  .faq-list details { border-bottom: 1px solid #d8d3c7; }
+  .faq-list summary { padding: 22px 42px 22px 0; cursor: pointer; font-size: 1rem; font-weight: 800; line-height: 1.5; }
+  .faq-list p { max-width: 720px; margin: 0 0 22px; color: #626963; line-height: 1.8; }
   @media (max-width: 900px) { .service-grid { grid-template-columns: 1fr 1fr; } .service-grid article:nth-child(2) { border-right: 0; } .story-grid, .inquiry-grid { grid-template-columns: 1fr; } .story-image img { aspect-ratio: 16/10; } }
-  @media (max-width: 720px) { .hero { min-height: 620px; } h1 { font-size: 3rem; } .hero-trust { display: grid; gap: 8px; } .split-intro { grid-template-columns: 1fr; gap: 18px; align-items: start; } .cards-grid, .blog-grid, .vehicle-grid { grid-template-columns: 1fr; } .vehicle-head { display: block; } }
+  @media (max-width: 720px) { .hero { min-height: 620px; } h1 { font-size: 3rem; } .hero-trust { display: grid; gap: 8px; } .split-intro, .faq-grid { grid-template-columns: 1fr; gap: 32px; align-items: start; } .faq-intro { position: static; } .cards-grid, .blog-grid, .vehicle-grid { grid-template-columns: 1fr; } .vehicle-head { display: block; } }
   @media (max-width: 480px) { .service-grid { grid-template-columns: 1fr; } .service-grid article { border-right: 0; border-bottom: 1px solid #e2ddd2; } .hero-actions .btn { width: 100%; } }
 </style>

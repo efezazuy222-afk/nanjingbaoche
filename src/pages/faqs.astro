@@ -1,13 +1,6 @@
 ---
 import MainLayout from "@src/layouts/MainLayout.astro";
-const faqs=[
-  ["包车价格怎么计算？","通常根据车型、服务时长、里程、出发日期和是否跨城综合确认。先提供人数与行程，我们再给出对应方案。"],
-  ["可以只接送机场或高铁站吗？","可以。提供航班或车次、人数、行李数量和上下车地址即可沟通。"],
-  ["行程中可以临时调整景点吗？","在不明显增加里程、服务时长且不影响后续安排的情况下，可以与司机沟通调整。跨城或较大变化需要重新确认。"],
-  ["包车包含门票和餐饮吗？","除非方案中另有说明，包车费用通常不包含景区门票、餐饮、住宿和景区内部交通。"],
-  ["老人孩子同行怎么办？","请提前说明年龄、人数、儿童座椅和行动便利需求，我们会协助减少换乘与不必要的步行。"],
-  ["多久前预订比较合适？","普通工作日可尽早咨询；节假日、会展期间、多人团队或特殊车型建议更早确认。"],
-];
+import { faqs } from "@src/data/faqs";
 const faqSchema={"@type":"FAQPage",mainEntity:faqs.map(([question,answer])=>({"@type":"Question",name:question,acceptedAnswer:{"@type":"Answer",text:answer}}))};
 ---
 <MainLayout title="南京包车常见问题｜价格、车型与行程调整" description="关于南京包车价格、接送机、儿童座椅、路线调整及费用包含的常见问题。" schema={faqSchema}>
