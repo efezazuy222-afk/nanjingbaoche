@@ -1,5 +1,5 @@
 ---
 import MainLayout from "@src/layouts/MainLayout.astro";
 ---
-<MainLayout title="页面未找到｜南京包车" description="您访问的页面不存在。"><section class="notfound"><div><strong>404</strong><h1>这条路暂时走不通</h1><p>页面可能已调整，您可以返回首页或查看南京包车线路。</p><a class="btn btn-primary" href="/">返回首页</a><a class="btn btn-light" href="/tours">查看线路</a></div></section></MainLayout>
+<MainLayout title="页面未找到｜南京包车" description="您访问的页面不存在。" noindex={true}><section class="notfound"><div><strong>404</strong><h1>这条路暂时走不通</h1><p>页面可能已调整，您可以返回首页或查看南京包车线路。</p><a class="btn btn-primary" href="/">返回首页</a><a class="btn btn-light" href="/tours">查看线路</a></div></section></MainLayout>
 <style>.notfound{min-height:65vh;display:grid;place-items:center;text-align:center;padding:50px 16px}.notfound strong{color:#a33a2b;font-family:Georgia,serif;font-size:5rem}.notfound h1{font-family:Georgia,"Songti SC",serif;font-size:2.5rem}.notfound p{color:#646c66}.notfound a{margin:15px 5px 0}</style>

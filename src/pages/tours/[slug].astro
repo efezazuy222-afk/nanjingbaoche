@@ -3,6 +3,7 @@ import { getCollection, render } from "astro:content";
 import { Icon } from "astro-icon/components";
 import MainLayout from "@src/layouts/MainLayout.astro";
 import InquiryForm from "@src/components/InquiryForm.astro";
+import { site } from "@src/config";
 
 export async function getStaticPaths() {
   const tours = await getCollection("tours");
@@ -10,8 +11,30 @@ export async function getStaticPaths() {
 }
 const { tour } = Astro.props;
 const { Content } = await render(tour);
+const pageUrl = `https://${site.domain}/tours/${tour.id}/`;
+const tourSchema = [
+  {
+    "@type": "Service",
+    "@id": `${pageUrl}#service`,
+    name: tour.data.title,
+    description: tour.data.description,
+    url: pageUrl,
+    image: tour.data.cover,
+    serviceType: "南京旅游包车",
+    areaServed: tour.data.location,
+    provider: { "@id": `https://${site.domain}/#organization` },
+  },
+  {
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "首页", item: `https://${site.domain}/` },
+      { "@type": "ListItem", position: 2, name: "南京包车线路", item: `https://${site.domain}/tours/` },
+      { "@type": "ListItem", position: 3, name: tour.data.title, item: pageUrl },
+    ],
+  },
+];
 ---
-<MainLayout title={`${tour.data.title}｜南京包车`} description={tour.data.description} image={tour.data.cover}>
+<MainLayout title={`${tour.data.title}｜南京包车`} description={tour.data.description} image={tour.data.cover} imageAlt={tour.data.title} schema={tourSchema}>
   <section class="detail-hero"><img src={tour.data.cover} alt={tour.data.title} /><div class="detail-shade"></div><div class="container detail-title"><span>{tour.data.category}</span><h1>{tour.data.title}</h1><p>{tour.data.description}</p></div></section>
   <div class="container detail-meta"><span><Icon name="bi:clock" /><small>参考时长</small><strong>{tour.data.duration}</strong></span><span><Icon name="bi:geo-alt" /><small>服务区域</small><strong>{tour.data.location}</strong></span><span><Icon name="bi:people" /><small>适合人数</small><strong>{tour.data.group}</strong></span></div>
   <section class="section"><div class="container detail-grid"><article class="prose"><Content /><div class="notice"><strong>说明</strong><p>页面为行程参考，不构成固定报价或景区开放承诺。实际服务以双方确认的日期、车型、里程、时长和用车方案为准。</p></div></article><aside><div class="highlights"><h2>行程亮点</h2>{tour.data.highlights.map((item) => <p><Icon name="bi:check-circle" />{item}</p>)}</div><InquiryForm /></aside></div></section>

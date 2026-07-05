@@ -8,8 +8,9 @@ const faqs=[
   ["老人孩子同行怎么办？","请提前说明年龄、人数、儿童座椅和行动便利需求，我们会协助减少换乘与不必要的步行。"],
   ["多久前预订比较合适？","普通工作日可尽早咨询；节假日、会展期间、多人团队或特殊车型建议更早确认。"],
 ];
+const faqSchema={"@type":"FAQPage",mainEntity:faqs.map(([question,answer])=>({"@type":"Question",name:question,acceptedAnswer:{"@type":"Answer",text:answer}}))};
 ---
-<MainLayout title="南京包车常见问题｜价格、车型与行程调整" description="关于南京包车价格、接送机、儿童座椅、路线调整及费用包含的常见问题。">
+<MainLayout title="南京包车常见问题｜价格、车型与行程调整" description="关于南京包车价格、接送机、儿童座椅、路线调整及费用包含的常见问题。" schema={faqSchema}>
   <section class="page-head"><div class="container"><span>服务说明</span><h1>常见问题</h1><p>预订之前，把容易忽略的细节先说清楚。</p></div></section>
   <section class="section"><div class="container faq-list">{faqs.map(([q,a],i)=><details open={i===0}><summary>{q}</summary><p>{a}</p></details>)}</div></section>
 </MainLayout>

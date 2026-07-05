@@ -3,10 +3,17 @@ import { getCollection, render } from "astro:content";
 import { Icon } from "astro-icon/components";
 import MainLayout from "@src/layouts/MainLayout.astro";
 import InquiryForm from "@src/components/InquiryForm.astro";
+import { site } from "@src/config";
 export async function getStaticPaths(){const posts=await getCollection("blog");return posts.map(post=>({params:{slug:post.id},props:{post}}))}
 const {post}=Astro.props;const {Content}=await render(post);
+const pageUrl=`https://${site.domain}/blogs/${post.id}/`;
+const publishedTime=`${post.data.date}T00:00:00+08:00`;
+const articleSchema=[
+  {"@type":"BlogPosting","@id":`${pageUrl}#article`,headline:post.data.title,description:post.data.description,image:post.data.cover,datePublished:publishedTime,inLanguage:"zh-CN",mainEntityOfPage:{"@id":`${pageUrl}#webpage`},author:{"@id":`https://${site.domain}/#organization`},publisher:{"@id":`https://${site.domain}/#organization`}},
+  {"@type":"BreadcrumbList",itemListElement:[{"@type":"ListItem",position:1,name:"首页",item:`https://${site.domain}/`},{"@type":"ListItem",position:2,name:"南京旅游攻略",item:`https://${site.domain}/blogs/`},{"@type":"ListItem",position:3,name:post.data.title,item:pageUrl}]},
+];
 ---
-<MainLayout title={`${post.data.title}｜南京包车攻略`} description={post.data.description} image={post.data.cover}>
+<MainLayout title={`${post.data.title}｜南京包车攻略`} description={post.data.description} image={post.data.cover} imageAlt={post.data.title} ogType="article" publishedTime={publishedTime} schema={articleSchema}>
   <article><header class="article-head"><div class="container"><span>{post.data.category}</span><h1>{post.data.title}</h1><p>{post.data.description}</p><div><Icon name="bi:calendar-event" />{post.data.date}<Icon name="bi:clock" />约{post.data.readTime}分钟阅读</div></div></header><div class="article-image"><img src={post.data.cover} alt={post.data.title}/></div><section class="section"><div class="container article-grid"><div class="prose"><Content/><p class="updated">提示：景点开放、预约和交通信息可能调整，请以出行当天的官方公告为准。</p></div><aside><InquiryForm/></aside></div></section></article>
 </MainLayout>
 <style>.article-head{padding:75px 0 50px;text-align:center;background:#e6e1d7}.article-head span{color:#a33a2b;font-weight:800}.article-head h1{max-width:920px;margin:12px auto;font-family:Georgia,"Songti SC",serif;font-size:clamp(2.5rem,5vw,4.4rem);line-height:1.2}.article-head p{max-width:680px;margin:0 auto;color:#5d655f;line-height:1.8}.article-head div div{display:flex;justify-content:center;align-items:center;gap:8px;margin-top:18px;color:#727973;font-size:.8rem}.article-image{width:min(1180px,calc(100% - 32px));height:min(55vw,620px);margin:30px auto 0}.article-image img{width:100%;height:100%;object-fit:cover}.article-grid{display:grid;grid-template-columns:1fr 400px;gap:70px;align-items:start}.updated{margin-top:38px;padding:16px;border-left:3px solid #a33a2b;background:#ece8df;font-size:.88rem}@media(max-width:900px){.article-grid{grid-template-columns:1fr}}</style>

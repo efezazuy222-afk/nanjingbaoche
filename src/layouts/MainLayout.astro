@@ -9,24 +9,69 @@ interface Props {
   title?: string;
   description?: string;
   image?: string;
+  imageAlt?: string;
+  ogType?: "website" | "article";
+  publishedTime?: string;
+  schema?: Record<string, unknown> | Record<string, unknown>[];
+  canonicalPath?: string;
+  noindex?: boolean;
 }
 
 const {
   title = "澜青旅行社｜南京旅游包车、接送机与商务用车",
   description = "南京本地包车服务，提供禄口机场接送、南京南站接送、家庭旅游包车、商务用车及南京周边定制线路。",
   image = "/img/hero.jpg",
+  imageAlt = "澜青旅行社南京包车服务",
+  ogType = "website",
+  publishedTime,
+  schema: pageSchema = [],
+  canonicalPath,
+  noindex = false,
 } = Astro.props;
-const canonical = new URL(Astro.url.pathname, `https://${site.domain}`).toString();
-const schema = {
-  "@context": "https://schema.org",
-  "@type": "LocalBusiness",
+const siteUrl = `https://${site.domain}`;
+const canonical = new URL(canonicalPath || Astro.url.pathname, siteUrl).toString();
+const absoluteImage = new URL(image, siteUrl).toString();
+const organizationId = `${siteUrl}/#organization`;
+const organizationSchema = {
+  "@type": "Organization",
+  "@id": organizationId,
   name: site.name,
-  url: `https://${site.domain}`,
+  url: siteUrl,
+  logo: `${siteUrl}/favicon.svg`,
   telephone: site.phone,
   email: site.email,
-  areaServed: "南京市及江苏周边",
-  description,
+  contactPoint: {
+    "@type": "ContactPoint",
+    telephone: site.phone,
+    contactType: "customer service",
+    areaServed: "CN",
+    availableLanguage: "zh-CN",
+  },
 };
+const websiteSchema = {
+  "@type": "WebSite",
+  "@id": `${siteUrl}/#website`,
+  url: siteUrl,
+  name: `${site.name}南京包车`,
+  inLanguage: "zh-CN",
+  publisher: { "@id": organizationId },
+};
+const webPageSchema = {
+  "@type": "WebPage",
+  "@id": `${canonical}#webpage`,
+  url: canonical,
+  name: title,
+  description,
+  inLanguage: "zh-CN",
+  isPartOf: { "@id": `${siteUrl}/#website` },
+  about: { "@id": organizationId },
+  primaryImageOfPage: { "@type": "ImageObject", url: absoluteImage },
+};
+const additionalSchemas = Array.isArray(pageSchema) ? pageSchema : [pageSchema];
+const structuredData = JSON.stringify({
+  "@context": "https://schema.org",
+  "@graph": [organizationSchema, websiteSchema, webPageSchema, ...additionalSchemas],
+}).replace(/</g, "\\u003c");
 ---
 
 <!doctype html>
@@ -36,16 +81,24 @@ const schema = {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <meta name="robots" content="index,follow" />
+    <meta name="robots" content={noindex ? "noindex,follow" : "index,follow,max-image-preview:large"} />
     <link rel="canonical" href={canonical} />
-    <link rel="icon" href="/img/favicon.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate" type="application/rss+xml" title="南京包车攻略" href={`${siteUrl}/rss.xml`} />
     <meta property="og:locale" content="zh_CN" />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={`${site.name}南京包车`} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:image" content={image} />
-    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+    <meta property="og:image" content={absoluteImage} />
+    <meta property="og:image:alt" content={imageAlt} />
+    {publishedTime && <meta property="article:published_time" content={publishedTime} />}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={absoluteImage} />
+    <script type="application/ld+json" set:html={structuredData} />
   </head>
   <body>
     <Header />
